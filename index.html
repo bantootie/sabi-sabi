@@ -387,18 +387,6 @@ const BUSINESS_NAMES = new Set([
   "baypark","vivo","oppo","samsung","apple","huawei","realme","tecno",
 ]);
 
-const DEFAMATION_PATTERNS = [
-  // Accusatory verbs paired with a subject
-  /\b(nagnakaw|nagnanakaw|magnanakaw|nandaya|mandadaya|manloloko|nanloko|nanloloko|nandamay|nag-abuso|nang-abuso|nang-rape|nangrape|nagbenta ng droga|nagbebenta ng droga|pusher|holdaper|holdupper|mamamatay tao|sinaktan|niloko|dinahas|ginahasa|inabuso|pinagsamantalahan)\b/i,
-  // English accusatory
-  /\b(scammer|scam|swindler|fraud|fraudster|thief|rapist|murderer|killer|drug dealer|drug lord|pusher|molester|abuser|harasser)\b/i,
-  // "ang [Business/Person] ay [accusation]" constructions
-  /\b(ay |is a |is an )(scammer|fraud|manloloko|magnanakaw|pusher|rapist|murderer|corrupt)\b/i,
-  // Direct accusation with "siya" or "sila"
-  /\b(siya|sila|niya|nila)\s+(ay\s+)?(nagnakaw|nanloko|nandaya|nag-abuso|nagbenta ng droga)\b/i,
-  // "don't go to" / "iwasan" + place/name
-  /\b(iwasan|huwag pumunta sa|huwag bumili sa|don't go to|avoid|beware of|stay away from)\b/i,
-];
 
 
 const PH_PLACE_NAMES = PH_CITIES.map(c => c.name.toLowerCase());
@@ -428,14 +416,6 @@ function hasPII(text) {
     const before = idx === 0 ? ' ' : lower[idx-1];
     const after  = idx+place.length >= lower.length ? ' ' : lower[idx+place.length];
     if (/[^a-z0-9]/.test(before) && /[^a-z0-9]/.test(after)) return true;
-  }
-  if (scanBusinessNames(lower)) return true;
-  if (DEFAMATION_PATTERNS.some(p => p.test(text))) return true;
-  if (/\b(si|ni|kay|nina|sina)\s+[A-Za-z]{2,}/i.test(text)) return true;
-  if (/(?<=[a-z,;:\s])\b[A-Z][a-z]{1,}\s+[A-Z][a-z]{1,}\b/.test(text)) return true;
-  if (/\b(sa|nasa|dito sa|doon sa|malapit sa|tabi ng|likod ng|harap ng)\s+[A-Za-z]{4,}/i.test(text)) return true;
-  return false;
-}
 
 /* MAP */
 const fakeMap     = document.getElementById('fakeMap');
